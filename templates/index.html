@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central de Certidões & Dossiê Imobiliário</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-slate-900 text-white border-b border-slate-800 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-amber-500 p-2.5 rounded-xl text-slate-950 font-bold">
+                    <i data-lucide="file-search" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight">CertiJuris Imobiliário</h1>
+                    <p class="text-xs text-slate-400">Emissão de Certidões Negativas & Organização de Dossiês</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700 text-xs text-slate-300">
+                <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+                <span>Hub de Portais Oficiais dos Tribunais</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Painel Lateral: Dados do Cliente & Seleção de Ação (4 Colunas) -->
+        <section class="lg:col-span-4 space-y-5">
+            
+            <!-- Card 1: Dados do Cliente (Aumenta muito o valor percebido) -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2">
+                    <i data-lucide="user" class="w-4 h-4 text-amber-600"></i>
+                    Dados para Emissão de Certidões
+                </h2>
+                
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Nome do Cliente / Parte</label>
+                    <input type="text" id="cliente-nome" placeholder="Ex: João da Silva" class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-xl p-2.5 focus:ring-2 focus:ring-amber-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">CPF ou CNPJ</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="cliente-doc" placeholder="000.000.000-00" class="flex-1 bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-xl p-2.5 focus:ring-2 focus:ring-amber-500 outline-none">
+                        <button onclick="copiarCPF()" title="Copiar Documento" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 rounded-xl transition flex items-center justify-center">
+                            <i data-lucide="copy" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">WhatsApp do Cliente</label>
+                    <input type="text" id="cliente-whatsapp" placeholder="Ex: (11) 91234-5678" class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-xl p-2.5 focus:ring-2 focus:ring-amber-500 outline-none">
+                    <p class="text-[11px] text-slate-400 mt-1">Com DDD. Usado pra abrir a conversa direto no botão abaixo.</p>
+                </div>
+            </div>
+
+            <!-- Card 2: Seleção de Ação Imobiliária e Estado do Imóvel -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                <label for="select-acao" class="block text-xs font-bold uppercase tracking-wider text-slate-500">
+                    Tipo de Ação Imobiliária
+                </label>
+                <div class="relative">
+                    <select id="select-acao" class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-xl p-3 pr-8 appearance-none cursor-pointer font-medium">
+                        <option value="" disabled selected>Carregando opções...</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </div>
+                </div>
+
+                <label for="select-uf" class="block text-xs font-bold uppercase tracking-wider text-slate-500 pt-1">
+                    Estado (UF) do Imóvel
+                </label>
+                <div class="relative">
+                    <select id="select-uf" class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-xl p-3 pr-8 appearance-none cursor-pointer font-medium">
+                        <option value="" selected>Carregando estados...</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </div>
+                </div>
+                <p class="text-[11px] text-slate-400">O portal do TJ, do TRF e do protesto muda de acordo com o estado.</p>
+            </div>
+
+            <!-- Card 3: Status da Coleta -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500">Dossiê Completo</h2>
+                    <span id="label-percentual" class="text-amber-600 font-extrabold text-lg">0%</span>
+                </div>
+
+                <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+                    <div id="barra-progresso" class="bg-amber-500 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 text-center pt-1">
+                    <div class="bg-emerald-50 border border-emerald-100 p-2.5 rounded-xl">
+                        <span id="qtd-concluidos" class="block text-lg font-bold text-emerald-700">0</span>
+                        <span class="text-[11px] text-emerald-600 font-medium">Anexados/Emitidos</span>
+                    </div>
+                    <div class="bg-rose-50 border border-rose-100 p-2.5 rounded-xl">
+                        <span id="qtd-pendentes" class="block text-lg font-bold text-rose-600">0</span>
+                        <span class="text-[11px] text-rose-500 font-medium">A Emitir/Pedir</span>
+                    </div>
+                </div>
+
+                <button onclick="abrirWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm mt-2">
+                    <i data-lucide="message-square" class="w-4 h-4"></i>
+                    Abrir Conversa no WhatsApp
+                </button>
+                <button onclick="copiarMensagemWhatsApp()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold py-2 px-4 rounded-xl text-[11px] transition flex items-center justify-center gap-2">
+                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                    Só copiar o texto (pra colar em outro lugar)
+                </button>
+            </div>
+
+        </section>
+
+        <!-- Painel Central: Hub de Emissão de Certidões e Documentos (8 Colunas) -->
+        <section class="lg:col-span-8">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                
+                <div class="p-5 border-b border-slate-100 bg-slate-50/70 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+                    <div>
+                        <h2 id="titulo-acao" class="text-base font-bold text-slate-900">Selecione uma ação no painel ao lado</h2>
+                        <span id="badge-categoria" class="inline-block bg-amber-100 text-amber-800 text-[11px] px-2.5 py-0.5 rounded-full font-semibold mt-1">
+                            Aguardando Seleção
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-500">Emita certidões diretamente nos portais oficiais</p>
+                </div>
+
+                <!-- Lista Dinâmica -->
+                <div id="container-documentos" class="p-5 space-y-4">
+                    <div class="text-center py-16 text-slate-400">
+                        <i data-lucide="file-check-2" class="w-12 h-12 mx-auto mb-3 opacity-30"></i>
+                        <p class="text-sm">Selecione uma ação imobiliária para carregar as certidões e documentos exigidos.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        let dadosAcaoAtual = null;
+        let estadoDocumentos = {};
+        let dadosPortais = null;
+        let ufSelecionada = '';
+        let acaoAtualKey = '';
+        let progressoPorAcao = {}; // { despejo: {doc_1: true, ...}, usucapiao: {...} }
+
+        const CHAVE_STORAGE = 'certijuris_estado_v1';
+
+        // Todo acesso a localStorage é protegido: em modo anônimo, com
+        // armazenamento bloqueado, ou em navegadores mais restritos, ele pode
+        // lançar erro — nesses casos o app segue funcionando sem persistir.
+        function salvarEstado() {
+            try {
+                if (acaoAtualKey) {
+                    progressoPorAcao[acaoAtualKey] = estadoDocumentos;
+                }
+                const estado = {
+                    clienteNome: document.getElementById('cliente-nome').value,
+                    clienteDoc: document.getElementById('cliente-doc').value,
+                    clienteWhatsapp: document.getElementById('cliente-whatsapp').value,
+                    uf: ufSelecionada,
+                    acaoAtual: acaoAtualKey,
+                    progressoPorAcao: progressoPorAcao,
+                };
+                localStorage.setItem(CHAVE_STORAGE, JSON.stringify(estado));
+            } catch (error) {
+                console.warn('Não foi possível salvar o progresso localmente:', error);
+            }
+        }
+
+        function carregarEstadoSalvo() {
+            try {
+                const bruto = localStorage.getItem(CHAVE_STORAGE);
+                return bruto ? JSON.parse(bruto) : null;
+            } catch (error) {
+                console.warn('Não foi possível ler o progresso salvo:', error);
+                return null;
+            }
+        }
+
+        function renderizarIcones() {
+            try {
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            } catch (error) {
+                console.warn('Não foi possível carregar os ícones (lucide):', error);
+            }
+        }
+
+        renderizarIcones();
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await carregarAcoes();
+            await carregarPortais();
+
+            const salvo = carregarEstadoSalvo();
+            if (salvo) {
+                progressoPorAcao = salvo.progressoPorAcao || {};
+                document.getElementById('cliente-nome').value = salvo.clienteNome || '';
+                document.getElementById('cliente-doc').value = salvo.clienteDoc || '';
+                document.getElementById('cliente-whatsapp').value = salvo.clienteWhatsapp || '';
+
+                if (salvo.uf) {
+                    document.getElementById('select-uf').value = salvo.uf;
+                    ufSelecionada = salvo.uf;
+                }
+                if (salvo.acaoAtual) {
+                    document.getElementById('select-acao').value = salvo.acaoAtual;
+                    await carregarChecklist(salvo.acaoAtual);
+                }
+            }
+
+            document.getElementById('select-acao').addEventListener('change', (e) => {
+                carregarChecklist(e.target.value);
+            });
+            document.getElementById('select-uf').addEventListener('change', (e) => {
+                ufSelecionada = e.target.value;
+                if (dadosAcaoAtual) {
+                    renderizarDocumentos();
+                }
+                salvarEstado();
+            });
+            ['cliente-nome', 'cliente-doc', 'cliente-whatsapp'].forEach(id => {
+                document.getElementById(id).addEventListener('input', salvarEstado);
+            });
+        });
+
+        async function carregarPortais() {
+            try {
+                const response = await fetch('/api/portais');
+                dadosPortais = await response.json();
+                const select = document.getElementById('select-uf');
+                select.innerHTML = '<option value="" disabled selected>Selecione o Estado...</option>';
+                dadosPortais.ufs.forEach(uf => {
+                    const option = document.createElement('option');
+                    option.value = uf.sigla;
+                    option.textContent = `${uf.sigla} — ${uf.nome}`;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Erro ao buscar portais por UF:', error);
+            }
+        }
+
+        // Resolve o link (e o nível de confiança) de um documento, seja ele
+        // fixo (link_emissao) ou dependente da UF escolhida (fonte_link).
+        function resolverLink(doc) {
+            if (doc.link_emissao) {
+                return { link: doc.link_emissao, confianca: 'verificado', nota: null, precisaUf: false };
+            }
+            if (!doc.fonte_link) {
+                return null;
+            }
+            if (!dadosPortais || !ufSelecionada) {
+                return { link: null, confianca: null, nota: null, precisaUf: true };
+            }
+
+            let dado = null;
+            if (doc.fonte_link === 'tj_estadual') {
+                dado = dadosPortais.tj_estadual[ufSelecionada];
+            } else if (doc.fonte_link === 'protesto_estadual') {
+                dado = dadosPortais.protesto_estadual[ufSelecionada];
+            } else if (doc.fonte_link === 'trf') {
+                dado = dadosPortais.trf_por_uf[ufSelecionada];
+            }
+
+            if (!dado) {
+                return { link: null, confianca: 'nao_encontrado', nota: null, precisaUf: false };
+            }
+            return {
+                link: dado.link || null,
+                confianca: dado.confianca,
+                nota: dado.nota || null,
+                nomeTribunal: dado.nome || null,
+                precisaUf: false
+            };
+        }
+
+        // Monta um link de busca no Google como alternativa segura quando não
+        // temos um portal oficial confirmado — nunca "chuta" uma URL.
+        function linkBuscaGoogle(doc) {
+            const ufNome = (dadosPortais && ufSelecionada)
+                ? (dadosPortais.ufs.find(u => u.sigla === ufSelecionada) || {}).nome
+                : '';
+            const termo = encodeURIComponent(`${doc.nome} ${ufNome} portal oficial emissão online`.trim());
+            return `https://www.google.com/search?q=${termo}`;
+        }
+
+        async function carregarAcoes() {
+            try {
+                const response = await fetch('/api/acoes');
+                const acoes = await response.json();
+                const select = document.getElementById('select-acao');
+                select.innerHTML = '<option value="" disabled selected>Selecione a Ação Imobiliária...</option>';
+
+                acoes.forEach(acao => {
+                    const option = document.createElement('option');
+                    option.value = acao.key;
+                    option.textContent = acao.titulo;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Erro ao buscar ações:', error);
+            }
+        }
+
+        async function carregarChecklist(tipoAcao) {
+            try {
+                const response = await fetch(`/api/checklist/${tipoAcao}`);
+                dadosAcaoAtual = await response.json();
+                acaoAtualKey = tipoAcao;
+
+                // Restaura o progresso salvo dessa ação, se existir; documentos
+                // novos que não estavam salvos antes começam como pendentes.
+                const salvoDessaAcao = progressoPorAcao[tipoAcao] || {};
+                estadoDocumentos = {};
+                dadosAcaoAtual.documentos.forEach(doc => {
+                    estadoDocumentos[doc.id] = salvoDessaAcao[doc.id] || false;
+                });
+
+                document.getElementById('titulo-acao').textContent = dadosAcaoAtual.titulo;
+                document.getElementById('badge-categoria').textContent = dadosAcaoAtual.categoria;
+
+                renderizarDocumentos();
+                atualizarProgresso();
+                salvarEstado();
+
+            } catch (error) {
+                console.error('Erro ao carregar checklist:', error);
+            }
+        }
+
+        function renderizarDocumentos() {
+            const container = document.getElementById('container-documentos');
+            container.innerHTML = '';
+
+            dadosAcaoAtual.documentos.forEach(doc => {
+                const estaChecado = estadoDocumentos[doc.id] || false;
+                const resolvido = resolverLink(doc);
+
+                const itemDiv = document.createElement('div');
+                itemDiv.className = `p-4 rounded-xl border transition-all ${
+                    estaChecado
+                        ? 'bg-emerald-50/50 border-emerald-200'
+                        : 'bg-white border-slate-200 hover:border-slate-300'
+                }`;
+
+                itemDiv.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <input
+                            type="checkbox"
+                            id="${doc.id}"
+                            ${estaChecado ? 'checked' : ''}
+                            onchange="alternarDocumento('${doc.id}')"
+                            class="mt-1 w-5 h-5 text-amber-600 rounded border-slate-300 focus:ring-amber-500 cursor-pointer"
+                        >
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between flex-wrap gap-2">
+                                <label for="${doc.id}" class="text-sm font-bold ${estaChecado ? 'line-through text-slate-500' : 'text-slate-800'} cursor-pointer">
+                                    ${doc.nome}
+                                </label>
+
+                                <div class="flex items-center gap-2">
+                                    ${botaoLinkHtml(doc, resolvido)}
+                                    ${doc.obrigatorio ? '<span class="text-[10px] font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded-md border border-slate-200">Obrigatório</span>' : ''}
+                                </div>
+                            </div>
+
+                            <p class="text-xs text-slate-500 mt-1">Categoria: <span class="font-semibold text-slate-700">${doc.categoria}</span>${resolvido && resolvido.nomeTribunal ? ` · <span class="font-semibold text-slate-700">${resolvido.nomeTribunal}</span>` : ''}</p>
+
+                            ${doc.alerta ? `
+                                <div class="mt-2.5 flex items-center gap-2 text-xs text-amber-800 bg-amber-50 p-2.5 rounded-lg border border-amber-200/70">
+                                    <i data-lucide="alert-circle" class="w-4 h-4 text-amber-600 shrink-0"></i>
+                                    <span>${doc.alerta}</span>
+                                </div>
+                            ` : ''}
+
+                            ${doc.dica ? `
+                                <div class="mt-2 flex items-center gap-2 text-xs text-slate-600 bg-slate-100 p-2.5 rounded-lg">
+                                    <i data-lucide="help-circle" class="w-4 h-4 text-slate-400 shrink-0"></i>
+                                    <span>${doc.dica}</span>
+                                </div>
+                            ` : ''}
+
+                            ${resolvido && resolvido.confianca === 'inferido' ? `
+                                <div class="mt-2 flex items-center gap-2 text-xs text-sky-800 bg-sky-50 p-2.5 rounded-lg border border-sky-200/70">
+                                    <i data-lucide="info" class="w-4 h-4 text-sky-600 shrink-0"></i>
+                                    <span>Link encontrado mas não 100% confirmado — confira antes de repassar ao cliente.${resolvido.nota ? ' ' + resolvido.nota : ''}</span>
+                                </div>
+                            ` : ''}
+
+                            ${resolvido && resolvido.confianca === 'nao_encontrado' ? `
+                                <div class="mt-2 flex items-center gap-2 text-xs text-rose-800 bg-rose-50 p-2.5 rounded-lg border border-rose-200/70">
+                                    <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-600 shrink-0"></i>
+                                    <span>Não achamos um portal oficial confirmado para este estado.${resolvido.nota ? ' ' + resolvido.nota : ''} Use o botão de busca ao lado.</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(itemDiv);
+            });
+
+            renderizarIcones();
+        }
+
+        // Decide qual botão mostrar ao lado do documento: link direto (com
+        // aviso se for "inferido"), botão de busca no Google (quando não há
+        // portal confirmado) ou um aviso pra escolher o estado primeiro.
+        function botaoLinkHtml(doc, resolvido) {
+            if (!resolvido) return '';
+
+            if (resolvido.precisaUf) {
+                return `<span class="text-[11px] text-slate-400 italic">Escolha o estado ao lado</span>`;
+            }
+
+            if (resolvido.link) {
+                const corBotao = resolvido.confianca === 'inferido'
+                    ? 'bg-sky-600 hover:bg-sky-700'
+                    : 'bg-blue-600 hover:bg-blue-700';
+                return `
+                    <a href="${resolvido.link}" target="_blank" class="inline-flex items-center gap-1 ${corBotao} text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shadow-sm">
+                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                        Emitir Certidão
+                    </a>`;
+            }
+
+            return `
+                <a href="${linkBuscaGoogle(doc)}" target="_blank" class="inline-flex items-center gap-1 bg-slate-500 hover:bg-slate-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shadow-sm">
+                    <i data-lucide="search" class="w-3.5 h-3.5"></i>
+                    Buscar Portal
+                </a>`;
+        }
+
+        function alternarDocumento(id) {
+            estadoDocumentos[id] = !estadoDocumentos[id];
+            renderizarDocumentos();
+            atualizarProgresso();
+            salvarEstado();
+        }
+
+        function atualizarProgresso() {
+            if (!dadosAcaoAtual) return;
+
+            const total = dadosAcaoAtual.documentos.length;
+            const concluidos = Object.values(estadoDocumentos).filter(v => v === true).length;
+            const percentual = total > 0 ? Math.round((concluidos / total) * 100) : 0;
+
+            document.getElementById('label-percentual').textContent = `${percentual}%`;
+            document.getElementById('barra-progresso').style.width = `${percentual}%`;
+            document.getElementById('qtd-concluidos').textContent = concluidos;
+            document.getElementById('qtd-pendentes').textContent = total - concluidos;
+        }
+
+        function copiarCPF() {
+            const doc = document.getElementById('cliente-doc').value;
+            if (!doc) {
+                alert("Preencha o CPF ou CNPJ no campo do cliente primeiro.");
+                return;
+            }
+            navigator.clipboard.writeText(doc).then(() => {
+                alert(`Documento (${doc}) copiado para a área de transferência!`);
+            });
+        }
+
+        // Monta o texto de cobrança de documentos. Retorna null (e já avisa o
+        // usuário) quando não há como montar a mensagem ainda.
+        function montarMensagemWhatsApp() {
+            if (!dadosAcaoAtual) {
+                alert("Selecione uma ação imobiliária primeiro.");
+                return null;
+            }
+
+            const nomeCliente = document.getElementById('cliente-nome').value || "Cliente";
+            const pendentes = dadosAcaoAtual.documentos.filter(doc => !estadoDocumentos[doc.id]);
+
+            if (pendentes.length === 0) {
+                alert("Todas as certidões e documentos já foram organizados!");
+                return null;
+            }
+
+            let texto = `Olá, *${nomeCliente}*! Para darmos entrada na sua *${dadosAcaoAtual.titulo}*, precisamos dos seguintes documentos/certidões pendentes:\n\n`;
+
+            pendentes.forEach((doc, index) => {
+                texto += `${index + 1}. *${doc.nome}*\n`;
+                if (doc.alerta) texto += `   ⚠️ _Nota: ${doc.alerta}_\n`;
+                const resolvido = resolverLink(doc);
+                if (resolvido && resolvido.link) {
+                    texto += `   🔗 ${resolvido.link}\n`;
+                } else if (resolvido && resolvido.precisaUf) {
+                    texto += `   🔗 _(selecione o estado do imóvel no sistema pra pegar o link certo)_\n`;
+                }
+            });
+
+            texto += `\nCaso tenha dúvidas sobre como emitir, nossa equipe pode auxiliar!`;
+            return texto;
+        }
+
+        function copiarMensagemWhatsApp() {
+            const texto = montarMensagemWhatsApp();
+            if (!texto) return;
+
+            navigator.clipboard.writeText(texto).then(() => {
+                alert("Lista de pendências copiada para o WhatsApp!");
+            });
+        }
+
+        // Extrai só os dígitos de um telefone em qualquer formato digitado.
+        function apenasDigitos(valor) {
+            return (valor || '').replace(/\D/g, '');
+        }
+
+        function abrirWhatsApp() {
+            const texto = montarMensagemWhatsApp();
+            if (!texto) return;
+
+            let numero = apenasDigitos(document.getElementById('cliente-whatsapp').value);
+            if (!numero) {
+                alert("Preencha o WhatsApp do cliente (com DDD) pra abrir a conversa direto. Ou use o botão 'Só copiar o texto' e cole manualmente.");
+                return;
+            }
+            // Garante o código do país (55 = Brasil) sem duplicar se a pessoa já digitou.
+            if (!numero.startsWith('55') || numero.length <= 11) {
+                numero = '55' + numero;
+            }
+
+            const url = `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
